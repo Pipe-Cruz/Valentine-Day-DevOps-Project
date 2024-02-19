@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: valentine-deployment
+  labels:
+    app: valentine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: valentine
+  template:
+    metadata:
+      labels:
+        app: valentine
+    spec:
+      containers:
+        - name: valentine-day
+          image: pipe7cruz/valentine-day:v1 # La imagen de tu aplicación
+          ports:
+            - containerPort: 80 # El puerto en el que tu aplicación escucha dentro del contenedor
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: valentine-service
+spec:
+  selector:
+    app: valentine
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer # Tipo de servicio, podría ser NodePort, LoadBalancer, ClusterIP, etc. dependiendo de tus necesidades
